@@ -1,11 +1,16 @@
-# Use a specific version of Java
+# You can change this base image to anything else
+# But make sure to use the correct version of Java
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-# Set the working directory in the container
+# Set the JAVA_OPTS environment variable
+ENV JAVA_OPTS -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
+
+# Simply the artifact path
+ARG artifact=/home/mediquity/eclipse-workspace/Jenkins-Zero-To-HeroTarun/java-maven-sonar-argocd-helm-k8s/spring-boot-app/target/spring-boot-web.jar
+
 WORKDIR /opt/google/app
 
-# Copy the JAR file from the build context to the working directory
-COPY target/spring-boot-web.jar app.jar
+COPY ${artifact} app.jar
 
 # This should not be changed
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
